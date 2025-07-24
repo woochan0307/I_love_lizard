@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학급 청소당번 뽑기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            margin-top: 30px;
+        }
+
+        .result-title {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .selected-numbers {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .number-card {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            color: #333;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            animation: fadeInUp 0.5s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .congratulations {
+            color: #667eea;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .emoji {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="emoji">🧹</div>
+        <h1>봉담중학교 학급 청소당번 뽑기</h1>
+        <p class="subtitle">1번부터 30번까지 학생 중에서<br>랜덤으로 5명을 선발합니다!</p>
+        
+        <button onclick="drawNumbers()">봉담중학교 청소 당번 뽑기! 🎲</button>
+        
+        <div id="results" class="results hidden">
+            <div class="result-title">🎉 이번 주 청소당번 🎉</div>
+            <div id="selectedNumbers" class="selected-numbers"></div>
+            <div class="congratulations">수고해주세요! 💪</div>
+        </div>
+    </div>
+
+    <script>
+        function drawNumbers() {
+            // 1부터 30까지의 숫자 배열 생성
+            const numbers = Array.from({length: 30}, (_, i) => i + 1);
+            
+            // Fisher-Yates 셔플 알고리즘으로 배열을 섞음
+            for (let i = numbers.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+            }
+            
+            // 처음 5개 숫자를 선택하고 정렬
+            const selectedNumbers = numbers.slice(0, 5).sort((a, b) => a - b);
+            
+            // 결과를 화면에 표시
+            displayResults(selectedNumbers);
+        }
+
+        function displayResults(numbers) {
+            const resultsDiv = document.getElementById('results');
+            const numbersDiv = document.getElementById('selectedNumbers');
+            
+            // 기존 결과 지우기
+            numbersDiv.innerHTML = '';
+            
+            // 각 번호를 카드로 표시
+            numbers.forEach((number, index) => {
+                setTimeout(() => {
+                    const numberCard = document.createElement('div');
+                    numberCard.className = 'number-card';
+                    numberCard.textContent = number + '번';
+                    numbersDiv.appendChild(numberCard);
+                }, index * 200); // 0.2초씩 지연하여 애니메이션 효과
+            });
+            
+            // 결과 영역 표시
+            resultsDiv.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
